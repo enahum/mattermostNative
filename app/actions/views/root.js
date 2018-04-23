@@ -17,6 +17,15 @@ import {
     retryGetPostsAction,
 } from 'app/actions/views/channel';
 
+export function startDataCleanup() {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: ViewTypes.DATA_CLEANUP,
+      payload: getState()
+    });
+  };
+}
+
 export function loadConfigAndLicense() {
     return async (dispatch, getState) => {
         const {currentUserId} = getState().entities.users;

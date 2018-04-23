@@ -66,4 +66,5 @@ export function registerScreens(store, Provider) {
     Navigation.registerComponent('TextPreview', () => wrapWithContextProvider(require('app/screens/text_preview').default), store, Provider);
     Navigation.registerComponent('Thread', () => wrapWithContextProvider(require('app/screens/thread').default), store, Provider);
     Navigation.registerComponent('UserProfile', () => wrapWithContextProvider(require('app/screens/user_profile').default), store, Provider);
+    Navigation.registerComponent('Entry', () => wrapWithContextProvider(require('app/screens/entry').default), store, Provider);
 }
