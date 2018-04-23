@@ -1,0 +1,21 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'MattermostNative' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for MattermostNative
+
+  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'react-native-fast-image', :path => '../node_modules/react-native-fast-image'
+
+  pod 'react-native-safe-area', :path => '../node_modules/react-native-safe-area'
+
+  target 'MattermostNativeTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

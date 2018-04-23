@@ -1,0 +1,49 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mattermostnative">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <application
+      android:name=".MainApplication"
+      android:label="@string/app_name"
+      android:icon="@mipmap/ic_launcher"
+      android:allowBackup="false"
+      android:theme="@style/AppTheme"
+    >
+        <meta-data android:name="com.wix.reactnativenotifications.gcmSenderId" android:value="184930218130\0"/>
+        <activity
+                android:name=".MainActivity"
+                android:label="@string/app_name"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:noHistory="false"
+                android:name="com.mattermost.share.ShareActivity"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                //  for sharing
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        <service android:name=".NotificationDismissService"
+                 android:enabled="true"
+                 android:exported="false" />
+        <service android:name=".NotificationReplyService"
+                 android:enabled="true"
+                 android:exported="false" />
+    </application>
+</manifest>
