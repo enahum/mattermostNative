@@ -1,4 +1,4 @@
-// Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
+// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See License.txt for license information.
 
 import {Provider} from 'react-redux';
@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler';
-// import StatusBarSizeIOS from 'react-native-status-bar-size';
+// import StatusBarSizeIOS from 'react-native-status-bar-size'; // potentially move this to the channel screen
 import semver from 'semver';
 
 import {General} from 'mattermost-redux/constants';
@@ -28,18 +28,8 @@ import {close as closeWebSocket} from 'mattermost-redux/actions/websocket';
 import {Client4} from 'mattermost-redux/client';
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
 
-import {
-    calculateDeviceDimensions,
-    setDeviceOrientation,
-    setDeviceAsTablet,
-    setStatusBarHeight,
-} from 'app/actions/device';
-import {
-    createPost,
-    loadConfigAndLicense,
-    loadFromPushNotification,
-    purgeOfflineStore,
-} from 'app/actions/views/root';
+import {calculateDeviceDimensions, setDeviceOrientation, setDeviceAsTablet, setStatusBarHeight} from 'app/actions/device';
+import {createPost, loadConfigAndLicense, loadFromPushNotification, purgeOfflineStore} from 'app/actions/views/root';
 import {setChannelDisplayName} from 'app/actions/views/channel';
 import {handleLoginIdChanged} from 'app/actions/views/login';
 import {handleServerUrlChanged} from 'app/actions/views/select_server';
@@ -73,6 +63,7 @@ export default class Mattermost {
 
         Client4.setUserAgent(DeviceInfo.getUserAgent());
         initializeSentry();
+        telemetry.captureStart('hydration');
         this.store = configureStore(initialState);
         registerScreens(this.store, Provider);
 
@@ -385,6 +376,7 @@ export default class Mattermost {
         }
 
         if (state.views.root.hydrationComplete) {
+            telemetry.captureEnd('hydration');
             const {height, width} = Dimensions.get('window');
             const orientation = height > width ? 'PORTRAIT' : 'LANDSCAPE';
             const {credentials, config} = state.entities.general;

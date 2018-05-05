@@ -5,7 +5,7 @@ import {NativeModules} from 'react-native';
 const {StartTime} = NativeModules;
 
 function logger(message, data) {
-    fetch('http://rnlogger.ngrok.io/', {
+    fetch('http://192.168.0.18:5001/', {
         method: 'post',
         body: JSON.stringify({
             message,
@@ -51,7 +51,7 @@ class Telemetry {
         });
 
         if (this.pendingSinceLaunchMetrics.length > 0) {
-            for (i in this.pendingSinceLaunchMetrics) {
+            for (let i in this.pendingSinceLaunchMetrics) {
                 const pending = this.pendingSinceLaunchMetrics[i];
                 this.metrics.push({
                     ...pending,
@@ -118,10 +118,12 @@ class Telemetry {
             startTime: this.appStartTime,
             endTime: d.getTime()
         });
-        logger('metrics', this.metrics);
+
+        if (!__DEV__) {
+            logger('metrics', this.metrics);
+        }
     }
 }
-
 
 const telemetry = new Telemetry();
 export default telemetry;

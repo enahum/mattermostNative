@@ -118,7 +118,6 @@ export default class Root extends PureComponent {
 
     render() {
         const locale = this.props.locale;
-        console.log('render screen with locale', locale);
 
         return (
             <IntlProvider

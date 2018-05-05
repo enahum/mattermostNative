@@ -14,6 +14,10 @@ class PushNotification {
         this.deviceToken = null;
 
         NotificationsAndroid.setRegistrationTokenUpdateListener((deviceToken) => {
+            if (this.onRegister) {
+                this.onRegister({token: deviceToken});
+            }
+
             this.deviceToken = deviceToken;
         });
 
@@ -81,7 +85,7 @@ class PushNotification {
                     }
                 }).
                 catch((err) => {
-                    console.log('Android getInitialNotifiation() failed', err); //eslint-disable-line no-console
+                    console.warn('Android getInitialNotifiation() failed', err); //eslint-disable-line no-console
                 });
         }
     }

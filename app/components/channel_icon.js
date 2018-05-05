@@ -4,18 +4,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+    Image,
     Text,
     View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-import {
-    ArchiveIcon,
-    AwayAvatar,
-    DndAvatar,
-    OfflineAvatar,
-    OnlineAvatar,
-} from 'app/components/status_icons';
 
 import {General} from 'mattermost-redux/constants';
 
@@ -107,48 +100,45 @@ export default class ChannelIcon extends React.PureComponent {
                 </View>
             );
         } else if (type === General.DM_CHANNEL && teammateDeletedAt) {
-            icon = (
-                <ArchiveIcon
-                    width={size}
-                    height={size}
-                    color={offlineColor}
-                />
-            );
+            // icon = (
+            //     <ArchiveIcon
+            //         width={size}
+            //         height={size}
+            //         color={offlineColor}
+            //     />
+            // );
         } else if (type === General.DM_CHANNEL) {
             switch (status) {
             case General.AWAY:
                 icon = (
-                    <AwayAvatar
-                        width={size}
-                        height={size}
-                        color={theme.awayIndicator}
+                    <Image
+                        source={require('assets/images/status/away_avatar.png')}
+                        style={{width: size, height: size, tintColor: theme.awayIndicator}}
                     />
                 );
                 break;
             case General.DND:
-                icon = (
-                    <DndAvatar
-                        width={size}
-                        height={size}
-                        color={theme.dndIndicator}
-                    />
-                );
+                // icon = (
+                //     <DndAvatar
+                //         width={size}
+                //         height={size}
+                //         color={theme.dndIndicator}
+                //     />
+                // );
                 break;
             case General.ONLINE:
                 icon = (
-                    <OnlineAvatar
-                        width={size}
-                        height={size}
-                        color={theme.onlineIndicator}
+                    <Image
+                        source={require('assets/images/status/online_avatar.png')}
+                        style={{width: size, height: size, tintColor: theme.onlineIndicator}}
                     />
                 );
                 break;
             default:
                 icon = (
-                    <OfflineAvatar
-                        width={size}
-                        height={size}
-                        color={offlineColor}
+                    <Image
+                        source={require('assets/images/status/offline_avatar.png')}
+                        style={{width: size, height: size, tintColor: offlineColor}}
                     />
                 );
                 break;

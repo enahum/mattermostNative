@@ -26,13 +26,13 @@ export function handleTeamChange(teamId, selectChannel = true) {
         ];
 
         if (selectChannel) {
+            const currentChannelId = getCurrentChannelId(state);
             actions.push({type: ChannelTypes.SELECT_CHANNEL, data: ''});
 
             const lastChannels = state.views.team.lastChannelForTeam[teamId] || [];
             const lastChannelId = lastChannels[0] || '';
-            const currentChannelId = getCurrentChannelId(state);
-            markChannelAsViewed(currentChannelId)(dispatch, getState);
-            markChannelAsRead(lastChannelId, currentChannelId)(dispatch, getState);
+            dispatch(markChannelAsViewed(currentChannelId));
+            dispatch(markChannelAsRead(lastChannelId, currentChannelId));
         }
 
         dispatch(batchActions(actions, 'BATCH_SELECT_TEAM'), getState);
@@ -46,7 +46,7 @@ export function selectFirstAvailableTeam() {
         const firstTeam = Object.values(teams).sort((a, b) => a.display_name.localeCompare(b.display_name))[0];
 
         if (firstTeam) {
-            handleTeamChange(firstTeam.id)(dispatch, getState);
+            dispatch(handleTeamChange(firstTeam.id));
         } else {
             EventEmitter.emit(NavigationTypes.NAVIGATION_NO_TEAMS);
         }

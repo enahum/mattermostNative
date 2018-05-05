@@ -13,10 +13,26 @@
         dataTable.addColumn({ type: 'date', id: 'Start' });
         dataTable.addColumn({ type: 'date', id: 'End' });
         dataTable.addRows([
-          [ 'reactInitialized', new Date(1524492311476), new Date(1524492311759) ],
-		[ 'jsBundleRun', new Date(1524492311733), new Date(1524492312343) ],
-		[ 'mattermostInitiliaze', new Date(1524492312157), new Date(1524492313651) ],
-		[ 'totalDuration', new Date(1524492311212), new Date(1524492313651) ]]);
+          [ 'registerScreens', new Date(1525522640639), new Date(1525522641903) ],
+		[ 'configurePushNotifications', new Date(1525522640571), new Date(1525522642029) ],
+		[ 'reactInitialized', new Date(1525522639464), new Date(1525522639797) ],
+		[ 'jsBundleRun', new Date(1525522639795), new Date(1525522642011) ],
+		[ 'hydration', new Date(1525522640338), new Date(1525522642168) ],
+		[ 'emmValidation', new Date(1525522642184), new Date(1525522642190) ],
+		[ 'selectInitialScreen', new Date(1525522642191), new Date(1525522642297) ],
+		[ 'sinceLaunch:splashscreen', new Date(1525522639321), new Date(1525522642321) ],
+		[ 'startSingleScreenApp', new Date(1525522642297), new Date(1525522642558) ],
+		[ 'ChannelNavBar', new Date(1525522642695), new Date(1525522643035) ],
+		[ 'channelPostList', new Date(1525522642822), new Date(1525522643042) ],
+		[ 'postTextBox', new Date(1525522642873), new Date(1525522643044) ],
+		[ 'settingsDrawer', new Date(1525522642657), new Date(1525522643049) ],
+		[ 'channelDrawer', new Date(1525522642609), new Date(1525522643051) ],
+		[ 'mattermostInitiliaze', new Date(1525522642297), new Date(1525522643053) ],
+		[ 'sinceLaunch:renderChannelScreen', new Date(1525522639321), new Date(1525522643053) ],
+		[ 'totalDuration', new Date(1525522639321), new Date(1525522643053) ],
+		[ 'postlist', new Date(1525522643394), new Date(1525522644189) ],
+		[ 'sinceLaunch:postlist', new Date(1525522639321), new Date(1525522644189) ],
+		[ 'totalDuration', new Date(1525522639321), new Date(1525522644189) ]]);
 
         chart.draw(dataTable);
       }

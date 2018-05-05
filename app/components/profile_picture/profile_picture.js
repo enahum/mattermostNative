@@ -49,6 +49,7 @@ export default class ProfilePicture extends PureComponent {
 
     componentWillMount() {
         const {edit, imageUri, user} = this.props;
+        this.mounted = true;
 
         if (edit && imageUri) {
             this.setImageURL(imageUri);
@@ -75,8 +76,14 @@ export default class ProfilePicture extends PureComponent {
         }
     }
 
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
     setImageURL = (pictureUrl) => {
-        this.setState({pictureUrl});
+        if (this.mounted) {
+            this.setState({pictureUrl});
+        }
     };
 
     render() {

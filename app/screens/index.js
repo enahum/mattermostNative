@@ -4,6 +4,8 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
 
+// import App from './App';
+import Channel from 'app/screens/channel';
 import SelectServer from 'app/screens/select_server';
 import IntlWrapper from 'app/components/root';
 
@@ -22,10 +24,11 @@ function wrapWithContextProvider(Comp, excludeEvents = true) {
 }
 
 export function registerScreens(store, Provider) {
+    // Navigation.registerComponent('App', () => wrapWithContextProvider(App), store, Provider);
     Navigation.registerComponent('About', () => wrapWithContextProvider(require('app/screens/about').default), store, Provider);
     Navigation.registerComponent('AddReaction', () => wrapWithContextProvider(require('app/screens/add_reaction').default), store, Provider);
     Navigation.registerComponent('AdvancedSettings', () => wrapWithContextProvider(require('app/screens/settings/advanced_settings').default), store, Provider);
-    Navigation.registerComponent('Channel', () => wrapWithContextProvider(require('app/screens/channel').default, false), store, Provider);
+    Navigation.registerComponent('Channel', () => wrapWithContextProvider(Channel, false), store, Provider);
     Navigation.registerComponent('ChannelAddMembers', () => wrapWithContextProvider(require('app/screens/channel_add_members').default), store, Provider);
     Navigation.registerComponent('ChannelInfo', () => wrapWithContextProvider(require('app/screens/channel_info').default), store, Provider);
     Navigation.registerComponent('ChannelMembers', () => wrapWithContextProvider(require('app/screens/channel_members').default), store, Provider);
