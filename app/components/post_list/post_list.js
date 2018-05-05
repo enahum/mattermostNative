@@ -361,7 +361,7 @@ export default class PostList extends PureComponent {
                 inverted={true}
                 keyExtractor={this.keyExtractor}
                 ListFooterComponent={this.props.renderFooter}
-
+                onEndReached={onEndReached}
                 onEndReachedThreshold={Platform.OS === 'ios' ? 0 : 1}
                 removeClippedSubviews={Platform.OS === 'android'}
                 {...refreshControl}

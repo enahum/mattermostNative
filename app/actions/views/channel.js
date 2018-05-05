@@ -293,9 +293,8 @@ export function handleSelectChannel(channelId) {
         const {currentTeamId} = getState().entities.teams;
 
         dispatch(setLoadMorePostsVisible(true));
-
-        loadPostsIfNecessaryWithRetry(channelId)(dispatch, getState);
-        selectChannel(channelId)(dispatch, getState);
+        dispatch(loadPostsIfNecessaryWithRetry(channelId));
+        dispatch(selectChannel(channelId));
 
         dispatch(batchActions([
             {

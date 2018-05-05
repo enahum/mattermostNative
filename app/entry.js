@@ -52,10 +52,22 @@ export default class EntryPoint {
             this.unsubscribeFromStore();
             console.log('PN token', state.entities.general.deviceToken);
 
+            const {credentials} = state.entities.general;
+            if (credentials.token && credentials.url) {
+                console.log('SET TOKEN AND URL');
+                Client4.setToken(credentials.token);
+                Client4.setUrl(credentials.url);
+            }
+
             const notification = this.push_notification.getNotification();
             if (notification) {
                 const {data, text, badge, completed} = notification;
-                this.push_notification.onPushNotificationReply(data, text, badge, completed);
+                if (completed) {
+                    this.push_notification.onPushNotificationReply(data, text, badge, completed);
+                } else {
+                    console.log('OPEN FROM PUSH NOTIFICATION');
+                    this.push_notification.loadNotification(notification);
+                }
                 this.push_notification.resetNotification();
             }
 
@@ -105,25 +117,16 @@ export default class EntryPoint {
 
     startApp = (animationType = 'fade') => {
         telemetry.captureStart('selectInitialScreen');
-        const {dispatch, getState} = this.store;
-        const {entities} = getState();
+        const {dispatch} = this.store;
         let screen = 'Channel';
 
-        Client4.setUrl('http://192.168.0.18:8065');
-        Client4.setToken('fsxkw6cfztndik6epth9qxe84c');
-        if (entities) {
-            const {credentials} = entities.general;
-
-            if (credentials.token && credentials.url) {
-                // fsxkw6cfztndik6epth9qxe84c
-                Client4.setUrl(credentials.url);
-                Client4.setToken(credentials.token);
-                screen = 'Channel';
-                const tracker = require('app/utils/time_tracker');
-                tracker.initialLoad = Date.now();
-                dispatch(loadMe());
-            }
+        if (Client4.getToken()) {
+            screen = 'Channel';
+            const tracker = require('app/utils/time_tracker');
+            tracker.initialLoad = Date.now();
+            dispatch(loadMe());
         }
+
         telemetry.captureEnd('selectInitialScreen');
         telemetry.captureStart('mattermostInitiliaze');
         telemetry.captureStart('startSingleScreenApp');

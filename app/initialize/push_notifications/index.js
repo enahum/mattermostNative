@@ -6,13 +6,11 @@ import DeviceInfo from 'react-native-device-info';
 
 import {markChannelAsRead} from 'mattermost-redux/actions/channels';
 import EventEmitter from 'mattermost-redux/utils/event_emitter';
-import {Client4} from 'mattermost-redux/client/index';
 import {General} from 'mattermost-redux/constants/index';
 import {setDeviceToken} from 'mattermost-redux/actions/general';
 
 import {createPost, loadFromPushNotification} from 'app/actions/views/root';
 import {ViewTypes} from 'app/constants';
-import {stripTrailingSlashes} from 'app/utils/url';
 
 import PushNotifications from './push_notifications';
 
@@ -22,6 +20,7 @@ export default class PushNotification {
     constructor(store) {
         this.store = store;
         this.appStarted = false;
+        this.notification = null;
 
         telemetry.captureStart('configurePushNotifications');
         PushNotifications.configure({
@@ -38,7 +37,11 @@ export default class PushNotification {
     };
 
     getNotification = () => {
-        return PushNotifications.getNotification();
+        return this.notification || PushNotifications.getNotification();
+    };
+
+    loadNotification = (notification) => {
+        this.store.dispatch(loadFromPushNotification(notification));
     };
 
     localNotification = (opts) => {
@@ -67,10 +70,10 @@ export default class PushNotification {
     };
 
     onPushNotification = (deviceNotification) => {
+        // THIS HAS TO WAIT UNTIL rehydration finishes!!
         const {dispatch, getState} = this.store;
         const state = getState();
-        const {token, url} = state.entities.general.credentials;
-
+        console.log('ON PUSH NOTIFICATION');
         const {data, foreground, message, userInfo, userInteraction} = deviceNotification;
         const notification = {
             data,
@@ -86,13 +89,15 @@ export default class PushNotification {
         } else if (foreground) {
             EventEmitter.emit(ViewTypes.NOTIFICATION_IN_APP, notification);
         } else if (userInteraction && !notification.localNotification) {
+            console.log('ON PUSH NOTIFICATION USER INTERACTION', this.appStarted);
             EventEmitter.emit('close_channel_drawer');
-            if (!this.appStarted) {
-                Client4.setToken(token);
-                Client4.setUrl(stripTrailingSlashes(url));
-            }
 
-            dispatch(loadFromPushNotification(notification));
+            if (state.views.root.hydrationComplete) {
+                console.log('LOAD DATA FROM PUSH NOTIFICATION');
+                this.loadNotification(notification);
+            } else {
+                this.notification = notification;
+            }
 
             if (this.appStarted) {
                 EventEmitter.emit(ViewTypes.NOTIFICATION_TAPPED);
@@ -116,16 +121,6 @@ export default class PushNotification {
                 message: text,
             };
 
-            if (!Client4.getUrl()) {
-                // Make sure the Client has the server url set
-                Client4.setUrl(state.entities.general.credentials.url);
-            }
-
-            if (!Client4.getToken()) {
-                // Make sure the Client has the server token set
-                Client4.setToken(state.entities.general.credentials.token);
-            }
-
             dispatch(createPost(post)).then(() => {
                 dispatch(markChannelAsRead(data.channel_id));
 
@@ -146,6 +141,7 @@ export default class PushNotification {
     };
 
     resetNotification = () => {
+        this.notification = null;
         PushNotifications.resetNotification();
     };
 

@@ -60,32 +60,39 @@ export function loadFromPushNotification(notification) {
         const {currentChannelId} = state.entities.channels;
         const channelId = data.channel_id;
 
+        console.log('NOTIFICATION DATA', data);
+
         // when the notification does not have a team id is because its from a DM or GM
         const teamId = data.team_id || currentTeamId;
+        console.log('TEAM FROM NOTIFICATION', data.team_id, currentTeamId);
 
         //verify that we have the team loaded
         if (teamId && (!teams[teamId] || !myTeamMembers[teamId])) {
+            console.log('NEED TO LOAD TEAMS AND TEAM MEMBERS');
             await Promise.all([
-                getMyTeams()(dispatch, getState),
-                getMyTeamMembers()(dispatch, getState),
+                dispatch(getMyTeams()),
+                dispatch(getMyTeamMembers()),
             ]);
         }
 
         // when the notification is from a team other than the current team
         if (teamId !== currentTeamId) {
-            selectTeam({id: teamId})(dispatch, getState);
+            console.log('TEAMS ARE DIFFERENT, DISPATCH SELECT TEAM');
+            dispatch(selectTeam({id: teamId}));
         }
 
         // when the notification is from the same channel as the current channel
         // we should get the posts
         if (channelId === currentChannelId) {
-            markChannelAsRead(channelId, null, false)(dispatch, getState);
+            console.log('SAME CHANNEL MARK AS READ AND GET POSTS');
+            dispatch(markChannelAsRead(channelId, null, false));
             await retryGetPostsAction(getPosts(channelId), dispatch, getState);
         } else {
+            console.log('DIFFERENT CHANNELS, MARK AS READ AND GET CHANNEL', channelId);
             // when the notification is from a channel other than the current channel
-            markChannelAsRead(channelId, currentChannelId, false)(dispatch, getState);
+            dispatch(markChannelAsRead(channelId, currentChannelId, false));
             dispatch(setChannelDisplayName(''));
-            handleSelectChannel(channelId)(dispatch, getState);
+            dispatch(handleSelectChannel(channelId));
         }
     };
 }
