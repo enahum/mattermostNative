@@ -200,7 +200,7 @@ export default class EventHandlers {
         const {dispatch} = this.store;
         Client4.serverVersion = '';
         Client4.setUserId('');
-        this.pn.setApplicationIconBadgeNumber(0);
+        this.pn.resetApplicationIconBadgeNumber(0);
         this.pn.cancelAllLocalNotifications();
         dispatch(setServerVersion(''));
     };

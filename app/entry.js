@@ -118,7 +118,7 @@ export default class EntryPoint {
     startApp = (animationType = 'fade') => {
         telemetry.captureStart('selectInitialScreen');
         const {dispatch} = this.store;
-        let screen = 'Channel';
+        let screen = 'SelectServer';
 
         if (Client4.getToken()) {
             screen = 'Channel';

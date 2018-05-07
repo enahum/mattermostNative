@@ -145,6 +145,10 @@ export default class PushNotification {
         PushNotifications.resetNotification();
     };
 
+    resetApplicationIconBadgeNumber = () => {
+        PushNotifications.setApplicationIconBadgeNumber(0);
+    };
+
     static setApplicationIconBadgeNumber = (number) => {
         PushNotifications.setApplicationIconBadgeNumber(number);
     };
