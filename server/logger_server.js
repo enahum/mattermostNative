@@ -4,9 +4,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var moment = require('moment');
+var momentDurationFormatSetup = require('moment-duration-format');
 var app = express();
 
-var rowTemplate = `[ '{name}', new Date({startTime}), new Date({endTime}) ]`;
+momentDurationFormatSetup(moment);
+
+var rowTemplate = `[ '{name}', '{duration}', new Date({startTime}), new Date({endTime}) ]`;
 var template = (
     `<html>
   <head>
@@ -20,6 +24,7 @@ var template = (
         var dataTable = new google.visualization.DataTable();
 
         dataTable.addColumn({ type: 'string', id: 'President' });
+        dataTable.addColumn({ type: 'string', id: 'Name' });
         dataTable.addColumn({ type: 'date', id: 'Start' });
         dataTable.addColumn({ type: 'date', id: 'End' });
         dataTable.addRows([
@@ -48,7 +53,11 @@ function visualize(data) {
         const row = data[i];
         if (row.name) {
             let newRow = rowTemplate;
+            const start = moment(row.startTime);
+            const end = moment(row.endTime);
+            const duration = moment.duration(end.diff(start), 'milliseconds');
             newRow = newRow.replace('{name}', row.name);
+            newRow = newRow.replace('{duration}', duration.format('s.SSS [s]', 0, {trim: false}));
             newRow = newRow.replace('{startTime}', row.startTime);
             newRow = newRow.replace('{endTime}', row.endTime);
 
